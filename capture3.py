@@ -4,6 +4,7 @@ import cv2, os
 import numpy as np
 from PIL import Image
 import time
+import copy
 
 # トレーニング画像（わたりのみ対応）
 train_path = './watariface'
@@ -23,9 +24,9 @@ face_cascade = cv2.CascadeClassifier(filepath)
 # 顔認識器の構築 for OpenCV 2
 # ※ OpenCV3ではFaceRecognizerはcv2.faceのモジュールになります
 # EigenFace
-#recognizer = cv2.createEigenFaceRecognizer()
+#recognizer = cv2.face.EigenFaceRecognizer_create()
 # FisherFace
-#recognizer = cv2.createFisherFaceRecognizer()
+#recognizer = cv2.face.FisherFaceRecognizer_create()
 # LBPH
 recognizer = cv2.face.LBPHFaceRecognizer_create()
 
@@ -41,12 +42,13 @@ def get_images_and_labels(path):
    for f in os.listdir(path):
        # 画像のパス
        image_path = os.path.join(path, f)
+       #print(f)
        # グレースケールで画像を読み込む
        image_pil = Image.open(image_path).convert('L')
        # NumPyの配列に格納
        image = np.array(image_pil, 'uint8')
        # Haar-like特徴分類器で顔を検知
-       faces = faceCascade.detectMultiScale(image)
+       faces = face_cascade.detectMultiScale(image)
        # 検出した顔画像の処理
        for (x, y, w, h) in faces:
            # 顔を 200x200 サイズにリサイズ
@@ -54,7 +56,7 @@ def get_images_and_labels(path):
            # 画像を配列に格納
            images.append(roi)
            # ファイル名からラベルを取得
-           labels.append(int(f[7:9]))
+           labels.append(0)
            # ファイル名を配列に格納
            files.append(f)
 
@@ -67,10 +69,10 @@ ret = capture.set(3, 480)
 ret = capture.set(4, 320)
 
 # トレーニング画像を取得
-#images, labels, files = get_images_and_labels(train_path)
+images, labels, files = get_images_and_labels(facepath)
 
 # トレーニング実施
-#recognizer.train(images, np.array(labels))
+recognizer.train(images, np.array(labels))
 
 # テスト画像を取得
 #test_images, test_labels, test_files = get_images_and_labels(test_path)
@@ -83,29 +85,30 @@ while True:
     gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     face = face_cascade.detectMultiScale(gray_image, scaleFactor=1.3, minNeighbors=2, minSize=(30, 30))
 
-    # if len(face) > 0:
-    #     for rect in face:
-    #         cv2.rectangle(image, tuple(rect[0:2]), tuple(rect[0:2]+rect[2:4]), (0, 0,255), thickness=2)
-    #         face_image = image[rect[1]:rect[1]+rect[3],rect[0]:rect[0]+rect[2]]
+    if len(face) > 0:
+        for rect in face:
+            face_image = copy.deepcopy(gray_image[rect[1]:rect[1]+rect[3],rect[0]:rect[0]+rect[2]])
+            test_image = cv2.resize(face_image,(200, 200))
+            cv2.rectangle(image, tuple(rect[0:2]), tuple(rect[0:2]+rect[2:4]), (0, 0,255), thickness=2)
+            # テスト画像に対して予測実施
+            label, confidence = recognizer.predict(test_image)
+            print("ラベル:{},確率{}".format(label,confidence))
 
     get_image_time = int((time.clock()-start)*1000) # 処理時間計測
     # 1フレーム取得するのにかかった時間を表示
     cv2.putText( image, str(get_image_time)+"ms", (10,10), 1, 1, (0,255,0))
 
-   # テスト画像に対して予測実施
-   #label, confidence = recognizer.predict()
+    # テスト画像に対して予測実施
+    #label, confidence = recognizer.predict(face_image)
+    #print("ラベル:{},確率{}".format(label,confidence))
 
     cv2.imshow("Camera Test",image)
     # キーが押されたら保存・終了
     if cv2.waitKey(10) == 32: # 32:[Space]
-        cv2.imwrite(imagepath+str(i)+".jpg",image)
         if len(face) > 0:
-            j=0
-            for rect in face:
-                # cv2.rectangle(image, tuple(rect[0:2]), tuple(rect[0:2]+rect[2:4]), (0, 0,255), thickness=2)
-                face_image = image[rect[1]:rect[1]+rect[3],rect[0]:rect[0]+rect[2]]
-                cv2.imwrite(facepath+str(i)+str(j)+"_face.jpg",face_image)
-                j+=1
+            if 'face_image' in locals():
+                cv2.imwrite(facepath+str(i)+"_face.jpg",face_image)
+                cv2.imwrite(imagepath+str(i)+".jpg",image)
         i+=1
         print("Save Image..."+str(i)+".jpg")
     # elif cv2.waitKey(10) == 27: # 27:Esc
