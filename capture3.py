@@ -6,6 +6,7 @@ from PIL import Image
 import time
 import copy
 
+
 # トレーニング画像（わたりのみ対応）
 train_path = './watariface'
 
