@@ -82,6 +82,8 @@ while True:
     if len(face) > 0:
         for rect in face:
             cv2.rectangle(image, tuple(rect[0:2]), tuple(rect[0:2]+rect[2:4]), (0, 0,255), thickness=2)
+            #print(rect)
+            roi = image[rect[1]:rect[1]+rect[3],rect[0]:rect[0]+rect[2]]
 
     get_image_time = int((time.clock()-start)*1000) # 処理時間計測
     # 1フレーム取得するのにかかった時間を表示
@@ -94,7 +96,10 @@ while True:
     # キーが押されたら保存・終了
     if cv2.waitKey(10) == 32: # 32:[Space]
         cv2.imwrite(str(i)+".jpg",image)
+        if 'roi' in locals():
+            cv2.imwrite(str(i)+"_face.jpg",roi)
         i+=1
+		
         print("Save Image..."+str(i)+".jpg")
     elif cv2.waitKey(10) == 27: # 27:Esc
         capture.release()
