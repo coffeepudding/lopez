@@ -3,6 +3,7 @@
 import cv2, os
 import numpy as np
 from PIL import Image
+import time
 
 # トレーニング画像（わたりのみ対応）
 train_path = './watariface'
@@ -11,7 +12,8 @@ train_path = './watariface'
 test_path = './test'
 
 # 検出器もろもろ
-filepath ='/usr/local/Cellar/opencv/3.4.0/share/OpenCV/haarcascades/haarcascade_frontalface_alt.xml'
+filepath ='/usr/local/share/OpenCV/haarcascades/haarcascade_frontalface_alt.xml'
+#filepath ='/usr/local/share/OpenCV/haarcascades/haarcascade_frontalface_alt.xml'
 face_cascade = cv2.CascadeClassifier(filepath)
 
 # 顔認識器の構築 for OpenCV 2
@@ -21,7 +23,7 @@ face_cascade = cv2.CascadeClassifier(filepath)
 # FisherFace
 #recognizer = cv2.createFisherFaceRecognizer()
 # LBPH
-recognizer = cv2.createLBPHFaceRecognizer()
+recognizer = cv2.face.LBPHFaceRecognizer_create()
 
 
 # 指定されたpath内の画像を取得
@@ -61,13 +63,13 @@ ret = capture.set(3, 480)
 ret = capture.set(4, 320)
 
 # トレーニング画像を取得
-images, labels, files = get_images_and_labels(train_path)
+#images, labels, files = get_images_and_labels(train_path)
 
 # トレーニング実施
-recognizer.train(images, np.array(labels))
+#recognizer.train(images, np.array(labels))
 
 # テスト画像を取得
-test_images, test_labels, test_files = get_images_and_labels(test_path)
+#test_images, test_labels, test_files = get_images_and_labels(test_path)
 
 
 i = 0
@@ -86,7 +88,7 @@ while True:
     cv2.putText( image, str(get_image_time)+"ms", (10,10), 1, 1, (0,255,0))
 
    # テスト画像に対して予測実施
-   label, confidence = recognizer.predict()
+   #label, confidence = recognizer.predict()
 
     cv2.imshow("Camera Test",image)
     # キーが押されたら保存・終了
