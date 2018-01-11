@@ -47,6 +47,7 @@ def main():
                 # 顔写真の保存先
                 picture_path = "{}/{}.jpg".format(FACEDIR, pic_i)
                 # 顔写真の保存
+                face_image = cv2.resize(face_image, (200, 200), interpolation=cv2.INTER_LINEAR)
                 cv2.imwrite(picture_path, face_image)
                 pic_i += 1
                 sleep(2)
