@@ -49,7 +49,7 @@ def main():
                 # 顔写真の保存
                 cv2.imwrite(picture_path, face_image)
                 pic_i += 1
-                sleep(1)
+                sleep(2)
 
 
 if __name__ == "__main__":
