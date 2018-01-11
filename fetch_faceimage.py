@@ -41,7 +41,7 @@ def main():
 
         if len(face) > 0:
             for rect in face:
-                print("人を検知しました: {}回目".fortmat(pic_i))
+                print("人を検知しました: {}回目".format(pic_i))
                 # 学習機で使用する顔写真
                 face_image = copy.deepcopy(gray_image[rect[1]:rect[1]+rect[3],rect[0]:rect[0]+rect[2]])
                 # 顔写真の保存先
