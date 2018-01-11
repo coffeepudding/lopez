@@ -18,14 +18,14 @@ def get_images_and_labels(path):
     labels = []
     for f in path:
         # グレースケールで画像を読み込む
-        image_pil = Image.open(image_path).convert('L')
+        image_pil = Image.open(f).convert('L')
         # NumPyの配列に格納
         image = np.array(image_pil, 'uint8')
         # 画像を配列に格納
         images.append(image)
         # ファイル名からラベルを取得
         labels.append(human[f.split("/")[-2]])
-   return images, labels
+    return images, labels
 
 
 def main():
@@ -49,14 +49,13 @@ def main():
     recognizer = cv2.face.LBPHFaceRecognizer_create()
 
     # トレーニング画像を取得
-    images, labels = get_images_and_labels(facepath)
+    images, labels = get_images_and_labels(files)
 
     # トレーニング実施
     recognizer.train(images, np.array(labels))
 
     # 学習済みモデルの保存
-    with open('human_model.pickle', mode='wb') as f:
-        pickle.dump(recognizer, f)
+    recognizer.save('human_model.xml')
 
 
 if __name__ == "__main__":
