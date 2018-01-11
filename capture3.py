@@ -11,6 +11,10 @@ train_path = './watariface'
 # テスト画像（デバッグ）
 test_path = './test'
 
+facepath = os.getcwd() + '/face/'
+imagepath = os.getcwd() + '/image/'
+
+
 # 検出器もろもろ
 filepath ='/usr/local/share/OpenCV/haarcascades/haarcascade_frontalface_alt.xml'
 #filepath ='/usr/local/share/OpenCV/haarcascades/haarcascade_frontalface_alt.xml'
@@ -79,11 +83,10 @@ while True:
     gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     face = face_cascade.detectMultiScale(gray_image, scaleFactor=1.3, minNeighbors=2, minSize=(30, 30))
 
-    if len(face) > 0:
-        for rect in face:
-            cv2.rectangle(image, tuple(rect[0:2]), tuple(rect[0:2]+rect[2:4]), (0, 0,255), thickness=2)
-            #print(rect)
-            roi = image[rect[1]:rect[1]+rect[3],rect[0]:rect[0]+rect[2]]
+    # if len(face) > 0:
+    #     for rect in face:
+    #         cv2.rectangle(image, tuple(rect[0:2]), tuple(rect[0:2]+rect[2:4]), (0, 0,255), thickness=2)
+    #         face_image = image[rect[1]:rect[1]+rect[3],rect[0]:rect[0]+rect[2]]
 
     get_image_time = int((time.clock()-start)*1000) # 処理時間計測
     # 1フレーム取得するのにかかった時間を表示
@@ -95,13 +98,17 @@ while True:
     cv2.imshow("Camera Test",image)
     # キーが押されたら保存・終了
     if cv2.waitKey(10) == 32: # 32:[Space]
-        cv2.imwrite(str(i)+".jpg",image)
-        if 'roi' in locals():
-            cv2.imwrite(str(i)+"_face.jpg",roi)
+        cv2.imwrite(imagepath+str(i)+".jpg",image)
+        if len(face) > 0:
+            j=0
+            for rect in face:
+                # cv2.rectangle(image, tuple(rect[0:2]), tuple(rect[0:2]+rect[2:4]), (0, 0,255), thickness=2)
+                face_image = image[rect[1]:rect[1]+rect[3],rect[0]:rect[0]+rect[2]]
+                cv2.imwrite(facepath+str(i)+str(j)+"_face.jpg",face_image)
+                j+=1
         i+=1
-		
         print("Save Image..."+str(i)+".jpg")
-    elif cv2.waitKey(10) == 27: # 27:Esc
-        capture.release()
-        cv2.destroyAllWindows()
-        break
+    # elif cv2.waitKey(10) == 27: # 27:Esc
+    #     capture.release()
+    #     cv2.destroyAllWindows()
+    #     break
