@@ -2,17 +2,28 @@
 # -*- coding: utf-8 -*-
 
 """
+実行環境: python2
+実行方法: python fetch_faceimage.py <対象人物>
 Webカメラで常時映像を取り続ける
 顔と識別されたら画像を取得する
 face/に顔だけ（モデル構築用）
 """
 import cv2
+import sys
 import os
 from time import sleep
 import copy
 
 
 def main():
+    # 保存先ディレクトリの確認 && 保存
+    args = sys.argv
+    # 対象ユーザー名をコマンドライン引数から取得
+    human_name = args[1]
+    FACEDIR = "{}/face/{}".format(os.getcwd(), human_name)
+    if not os.path.exists(FACEDIR):
+        os.makedirs(FACEDIR)
+
     # 検出器もろもろ
     filepath ='/usr/local/share/OpenCV/haarcascades/haarcascade_frontalface_alt.xml'
     face_cascade = cv2.CascadeClassifier(filepath)
@@ -30,6 +41,7 @@ def main():
 
         if len(face) > 0:
             for rect in face:
+                print("人を検知しました: {}回目".fortmat(pic_i))
                 # 学習機で使用する顔写真
                 face_image = copy.deepcopy(gray_image[rect[1]:rect[1]+rect[3],rect[0]:rect[0]+rect[2]])
                 # 顔写真の保存先
@@ -41,10 +53,4 @@ def main():
 
 
 if __name__ == "__main__":
-    # 対象ユーザー名を指定する
-    human_name = ""
-    FACEDIR = "{}/face/{}".format(os.getcwd(), human_name)
-    if not os.path.exists(FACEDIR):
-        os.makedirs(FACEDIR)
-
     main()
