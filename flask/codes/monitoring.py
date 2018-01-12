@@ -31,7 +31,7 @@ def main():
         gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
         face = face_cascade.detectMultiScale(gray_image, scaleFactor=1.3, minNeighbors=2, minSize=(30, 30))
 
-        if len(face) = 0:
+        if len(face) > 0:
             rect = face[0]
             # 学習機で使用する顔写真
             face_image = copy.deepcopy(gray_image[rect[1]:rect[1]+rect[3],rect[0]:rect[0]+rect[2]])
