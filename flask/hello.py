@@ -14,6 +14,12 @@ def hello():
     #return name
     return render_template('hello.html', title='入退室管理アプリ', name=name) #変更
 
+@app.route('/testpost')
+def webhook():
+    print request.headers
+    print "body: %s" % request.data
+    return request.data
+
 ## おまじない
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5000)
