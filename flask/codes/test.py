@@ -12,7 +12,7 @@ def calc_func(x):
 
 
 def calc_time(username):
-    conn = sqlite3.connect("../monitoring.db")
+    conn = sqlite3.connect("./monitoring.db")
     conn.text_factory = str
     cur = conn.cursor()
     a, b = [], []

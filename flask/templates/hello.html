@@ -6,7 +6,39 @@
 </head>
 <body>
   <h1>入退室管理アプリ</h1>
-  <p>入退室履歴</p>
- <p>{{ aaa }}</p>
+  <h3>累計時間</h3>
+    <table>
+      <tr>
+        <th>名前</th>
+        <th>時刻</th>
+      </tr>
+      <tr>
+        <td>西開地</td>
+        <td>{{time["0"]}}</td>
+      </tr>
+        <td>平野</td>
+        <td>{{time["1"]}}</td>
+      </tr>
+        <td>亘理</td>
+        <td>{{time["2"]}}</td>
+      </tr>
+    </table>
+  <h3>入退室履歴</h3>
+  <table>
+    <tr>
+      <th></th>
+      <th>名前</th>
+      <th>時刻</th>
+      <th>入退室</th>
+    </tr>
+    {% for id,row in enumerate(data_list) %}
+    <tr>
+      <td>{{id}}</td>
+      <td>{{row['username']}}</td>
+      <td>{{row['timestamp']}}</td>
+      <td>{{row['inout']}}</td>
+    </tr>
+    {% endfor %}
+  </table>
 </body>
 </html>
