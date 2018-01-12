@@ -14,7 +14,7 @@ def hello():
     #return name
     return render_template('hello.html', title='入退室管理アプリ', name=name) #変更
 
-@app.route('/testpost')
+@app.route('/testpost', methods=['POST'])
 def webhook():
     print request.headers
     print "body: %s" % request.data
