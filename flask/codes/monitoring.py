@@ -38,9 +38,13 @@ def main():
                 face_image = cv2.resize(face_image, (200, 200), interpolation=cv2.INTER_LINEAR)
                 cv2.imwrite(picture_path, face_image)
                 # 顔写真をモデルにツッコミ判定を行う
+                # 画像の読み込み
                 test_image = Image.open(picture_path).convert('L')
+                # 画像をnumpyの形式に変更する
+                test_image = np.array(test_image, 'uint8')
                 label, confidence = recognizer.predict(test_image)
                 print("ラベル:{},確信度{}".format(label,confidence))
+                # 連続で認識しないようにsleepを入れる
                 sleep(3)
 
 
