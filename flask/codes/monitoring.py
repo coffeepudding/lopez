@@ -10,17 +10,7 @@ import copy
 from datetime import datetime
 import numpy as np
 
-def main():
-    # 分類器を読み込む
-    recognizer = cv2.face.LBPHFaceRecognizer_create()
-    recognizer.read('human_model.xml')
-
-    # human_model
-    human = {0: "西開地", 1: "平野", 2: "亘理"}
-
-    # 検出器もろもろ
-    filepath ='/usr/local/share/OpenCV/haarcascades/haarcascade_frontalface_alt.xml'
-    face_cascade = cv2.CascadeClassifier(filepath)
+def monitor():
     # カメラセット
     capture = cv2.VideoCapture(0)
     # 画像サイズの指定
@@ -45,12 +35,25 @@ def main():
             # 画像をnumpyの形式に変更する
             test_image = np.array(face_image, 'uint8')
             label, confidence = recognizer.predict(test_image)
-            print("名前: {}, ファイル名: {}".format(human[label], picture_path))
-                
-        # 連続で認識しないようにsleepを入れる ※調整が必要
-        sleep(10)
-        del ret, image, face_image
+            break
+    return human[label], picture_path
+
+
+def main():
+    while True:
+        label, filename  = monitor()
+        print("氏名: {}, ファイル名: {}".format(label, filename))
+        sleep(5)
 
 
 if __name__ == "__main__":
+    # 分類器を読み込む
+    recognizer = cv2.face.LBPHFaceRecognizer_create()
+    recognizer.read('human_model.xml')
+    # human_model
+    human = {0: "西開地", 1: "平野", 2: "亘理"}
+    # 検出器もろもろ
+    filepath ='/usr/local/share/OpenCV/haarcascades/haarcascade_frontalface_alt.xml'
+    face_cascade = cv2.CascadeClassifier(filepath)
+
     main()
