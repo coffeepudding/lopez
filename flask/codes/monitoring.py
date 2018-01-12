@@ -8,6 +8,7 @@ import os
 from time import sleep
 import copy
 from datetime import datetime
+import numpy as np
 
 def main():
     # 分類器を読み込む
