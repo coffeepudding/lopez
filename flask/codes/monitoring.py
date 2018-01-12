@@ -33,7 +33,7 @@ def main():
                 face_image = copy.deepcopy(gray_image[rect[1]:rect[1]+rect[3],rect[0]:rect[0]+rect[2]])
                 # 顔写真の保存先
                 # 写真の命名規則: 2018/01/12-12:36:57
-                picture_path = "{}/faces/{}.jpg".format(os.getcwd(), datetime.now().strftime("%Y/%m/%d-%H:%M:%S"))
+                picture_path = "{}/faces/{}.jpg".format(os.getcwd(), datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
                 # 顔写真の保存
                 face_image = cv2.resize(face_image, (200, 200), interpolation=cv2.INTER_LINEAR)
                 cv2.imwrite(picture_path, face_image)
