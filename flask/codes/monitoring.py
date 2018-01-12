@@ -12,7 +12,7 @@ from datetime import datetime
 def main():
     # 分類器を読み込む
     recognizer = cv2.face.LBPHFaceRecognizer_create()
-    recognizer.load('human_model.xml')
+    recognizer.read('human_model.xml')
 
     # 検出器もろもろ
     filepath ='/usr/local/share/OpenCV/haarcascades/haarcascade_frontalface_alt.xml'
