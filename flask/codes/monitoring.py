@@ -43,8 +43,11 @@ def monitor():
 
 def store_data(username, timestamp):
     conn = sqlite3.connect("../monitoring.db")
+    conn.text_factory = str
     cur = conn.cursor()
-    cur.execute("INSERT INTO app values( ?, ? )", [ username, timestamp ])
+    sql = "INSERT INTO app (username, timestamp) values( ?, ? )"
+    user = (str(username), str(timestamp))
+    cur.execute(sql, user)
     conn.commit()
     conn.close()
 
@@ -53,7 +56,8 @@ def main():
     while True:
         label, filename, confidence  = monitor()
         print("氏名: {}, ファイル名: {}, 確信度: {}".format(label, filename, confidence))
-        store_data(username=label, filename)
+        filename = filename.split("/")[-1].replace(".jpg", "")
+        store_data(label, filename)
         sleep(5)
 
 
