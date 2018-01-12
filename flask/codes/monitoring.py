@@ -36,19 +36,25 @@ def monitor():
             test_image = np.array(face_image, 'uint8')
             label, confidence = recognizer.predict(test_image)
             break
-    return human[label], picture_path
+    capture.release()
+    return human[label], picture_path, confidence
 
 
 def main():
     while True:
-        label, filename  = monitor()
-        print("氏名: {}, ファイル名: {}".format(label, filename))
+        label, filename, confidence  = monitor()
+        print("氏名: {}, ファイル名: {}, 確信度: {}".format(label, filename, confidence))
         sleep(5)
 
 
 if __name__ == "__main__":
     # 分類器を読み込む
-    recognizer = cv2.face.LBPHFaceRecognizer_create()
+    # EigenFace
+    #recognizer = cv2.face.EigenFaceRecognizer_create()
+    # FisherFace
+    recognizer = cv2.face.FisherFaceRecognizer_create()
+    # LBPH
+    #recognizer = cv2.face.LBPHFaceRecognizer_create()
     recognizer.read('human_model.xml')
     # human_model
     human = {0: "西開地", 1: "平野", 2: "亘理"}

@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 from flask import Flask, render_template #追加
 
 app = Flask(__name__)
@@ -6,8 +9,8 @@ app = Flask(__name__)
 def hello():
     name = "Hoge"
     #return name
-    return render_template('hello.html', title='flask test', name=name) #変更
+    return render_template('hello.html', title='入退室管理アプリ', name=name) #変更
 
 ## おまじない
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=5000)
