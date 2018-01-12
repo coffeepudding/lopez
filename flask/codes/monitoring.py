@@ -15,6 +15,9 @@ def main():
     recognizer = cv2.face.LBPHFaceRecognizer_create()
     recognizer.read('human_model.xml')
 
+    # human_model
+    human = {0: "西開地", 1: "平野", 2: "亘理"}
+
     # 検出器もろもろ
     filepath ='/usr/local/share/OpenCV/haarcascades/haarcascade_frontalface_alt.xml'
     face_cascade = cv2.CascadeClassifier(filepath)
@@ -38,15 +41,13 @@ def main():
                 # 顔写真の保存
                 face_image = cv2.resize(face_image, (200, 200), interpolation=cv2.INTER_LINEAR)
                 cv2.imwrite(picture_path, face_image)
-                # 顔写真をモデルにツッコミ判定を行う
-                # 画像の読み込み
-                test_image = Image.open(picture_path).convert('L')
+                # 顔を識別する
                 # 画像をnumpyの形式に変更する
-                test_image = np.array(test_image, 'uint8')
+                test_image = np.array(face_image, 'uint8')
                 label, confidence = recognizer.predict(test_image)
-                print("ラベル:{},確信度{}".format(label,confidence))
-                # 連続で認識しないようにsleepを入れる
-                sleep(3)
+                print("名前: {}".format(human[label]))
+                # 連続で認識しないようにsleepを入れる ※調整が必要
+                sleep(5)
 
 
 if __name__ == "__main__":
