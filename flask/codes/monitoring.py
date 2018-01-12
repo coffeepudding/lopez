@@ -45,8 +45,21 @@ def store_data(username, timestamp):
     conn = sqlite3.connect("../monitoring.db")
     conn.text_factory = str
     cur = conn.cursor()
-    sql = "INSERT INTO app (username, timestamp) values( ?, ? )"
-    user = (str(username), str(timestamp))
+
+    # 既に入室しているかどうかを確認する
+    status = ""
+    sql = "SELECT count(*) from app WHERE username = {} AND timestamp LIKE '{}%' ORDER BY timstamp asc".format(username, timestamp.split(' '[0]))
+    for row in c.execute(sql):
+        count = row[0]
+    if count == 0:
+        status = "入室"
+    elif count % 2 == 1:
+        status == "入室"
+    elif count % 2 == 0:
+        status == "退室"
+
+    sql = "INSERT INTO app (username, timestamp, status) values( ?, ?, ? )"
+    user = (str(username), str(timestamp), str(status))
     cur.execute(sql, user)
     conn.commit()
     conn.close()
