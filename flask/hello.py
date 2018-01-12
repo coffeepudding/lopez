@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from flask import Flask, render_template #追加
+from flask import Flask, render_template, request #追加
 import sys
 reload(sys)
 sys.setdefaultencoding('utf-8')
@@ -14,11 +14,9 @@ def hello():
     #return name
     return render_template('hello.html', title='入退室管理アプリ', name=name) #変更
 
-@app.route('/testpost', methods=['POST'])
-def webhook():
-    print request.headers
-    print "body: %s" % request.data
-    return request.data
+@app.route('/testpost', methods=["GET","POST"])
+def testpost():
+    return render_template('hello.html', title='入退室管理アプリ',aaa=hoge) #変更
 
 ## おまじない
 if __name__ == "__main__":
