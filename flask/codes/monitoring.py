@@ -31,23 +31,24 @@ def main():
         gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
         face = face_cascade.detectMultiScale(gray_image, scaleFactor=1.3, minNeighbors=2, minSize=(30, 30))
 
-        if len(face) > 0:
-            for rect in face:
-                # 学習機で使用する顔写真
-                face_image = copy.deepcopy(gray_image[rect[1]:rect[1]+rect[3],rect[0]:rect[0]+rect[2]])
-                # 顔写真の保存先
-                # 写真の命名規則: 2018/01/12-12:36:57
-                picture_path = "{}/faces/{}.jpg".format(os.getcwd(), datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
-                # 顔写真の保存
-                face_image = cv2.resize(face_image, (200, 200), interpolation=cv2.INTER_LINEAR)
-                cv2.imwrite(picture_path, face_image)
-                # 顔を識別する
-                # 画像をnumpyの形式に変更する
-                test_image = np.array(face_image, 'uint8')
-                label, confidence = recognizer.predict(test_image)
-                print("名前: {}".format(human[label]))
-                # 連続で認識しないようにsleepを入れる ※調整が必要
-                sleep(5)
+        if len(face) = 0:
+            rect = face[0]
+            # 学習機で使用する顔写真
+            face_image = copy.deepcopy(gray_image[rect[1]:rect[1]+rect[3],rect[0]:rect[0]+rect[2]])
+            # 顔写真の保存先
+            # 写真の命名規則: 2018/01/12-12:36:57
+            picture_path = "{}/faces/{}.jpg".format(os.getcwd(), datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+            # 顔写真の保存
+            face_image = cv2.resize(face_image, (200, 200), interpolation=cv2.INTER_LINEAR)
+            cv2.imwrite(picture_path, face_image)
+            # 顔を識別する
+            # 画像をnumpyの形式に変更する
+            test_image = np.array(face_image, 'uint8')
+            label, confidence = recognizer.predict(test_image)
+            print("名前: {}, ファイル名: {}".format(human[label], picture_path))
+                
+        # 連続で認識しないようにsleepを入れる ※調整が必要
+        sleep(5)
 
 
 if __name__ == "__main__":
