@@ -9,6 +9,7 @@ from time import sleep
 import copy
 from datetime import datetime
 import numpy as np
+import sqlite3
 
 def monitor():
     # カメラセット
@@ -40,10 +41,19 @@ def monitor():
     return human[label], picture_path, confidence
 
 
+def store_data(username, timestamp):
+    conn = sqlite3.connect("../monitoring.db")
+    cur = conn.cursor()
+    cur.execute("INSERT INTO app values( ?, ? )", [ username, timestamp ])
+    conn.commit()
+    conn.close()
+
+
 def main():
     while True:
         label, filename, confidence  = monitor()
         print("氏名: {}, ファイル名: {}, 確信度: {}".format(label, filename, confidence))
+        store_data(username=label, filename)
         sleep(5)
 
 

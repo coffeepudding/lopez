@@ -11,7 +11,7 @@ def fetch_data():
     res = []
     conn = sqlite3.connect(dbname)
     c = conn.cursor()
-    sql = "SELECT * FROM app ORDER BY time_history desc"
+    sql = "SELECT * FROM app ORDER BY timestamp desc"
     for row in c.execute(sql):
         res.append(["username": row[0], "timestamp": row[1]])
     conn.close()
