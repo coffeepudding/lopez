@@ -1,10 +1,21 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from flask import Flask, render_template, request #追加
+from flask import Flask, render_template, request, sqlite3 #追加
 import sys
 reload(sys)
 sys.setdefaultencoding('utf-8')
+dbname = 'monitoring.db'
+
+def fetch_data():
+    res = []
+    conn = sqlite3.connect(dbname)
+    c = conn.cursor()
+    sql = "SELECT * FROM app ORDER BY time_history desc"
+    for row in c.execute(sql):
+        res.append(["username": row[0], "timestamp": row[1]])
+    conn.close()
+    return res
 
 app = Flask(__name__)
 
