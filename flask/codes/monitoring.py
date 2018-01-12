@@ -48,7 +48,8 @@ def main():
             print("名前: {}, ファイル名: {}".format(human[label], picture_path))
                 
         # 連続で認識しないようにsleepを入れる ※調整が必要
-        sleep(5)
+        sleep(10)
+        del ret, image, face_image
 
 
 if __name__ == "__main__":
