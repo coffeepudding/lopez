@@ -44,9 +44,9 @@ def main():
     # # EigenFace
     # #recognizer = cv2.face.EigenFaceRecognizer_create()
     # # FisherFace
-    # #recognizer = cv2.face.FisherFaceRecognizer_create()
+    recognizer = cv2.face.FisherFaceRecognizer_create()
     # # LBPH
-    recognizer = cv2.face.LBPHFaceRecognizer_create()
+    # recognizer = cv2.face.LBPHFaceRecognizer_create()
 
     # トレーニング画像を取得
     images, labels = get_images_and_labels(files)
